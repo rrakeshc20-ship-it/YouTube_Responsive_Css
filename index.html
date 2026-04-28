@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VideoHome Clone</title>
+    <style>
+        .youtube {
+            display: flex;
+            width: 120px;
+            height:50px;
+            border-radius: 50%;
+            
+        }
+        .youtext {
+            display: flex;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0f0f0f; 
+            color: white;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            
+        }
+
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #0f0f0f;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .search-box {
+            display: flex;
+            width: 40%;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 8px 15px;
+            background-color: #121212;
+            border: 1px solid #333;
+            border-radius: 20px 0 0 20px;
+            color: white;
+            outline: none;
+        }
+
+        .search-box button {
+            padding: 8px 20px;
+            background-color: #222;
+            border: 1px solid #333;
+            border-left: none;
+            border-radius: 0 20px 20px 0;
+            color: white;
+            cursor: pointer;
+        }
+        .show-more-btn {
+        background-color: #ff385c;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        cursor: pointer;
+        
+        
+        display: flex;
+        flex-direction: column;
+        align-items: center; 
+        transition: transform 0.2s;
+    }
+
+    
+        
+        .page-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        
+        nav {
+            width: 240px;
+            background-color: #0f0f0f;
+            padding: 10px;
+            overflow-y: auto;
+        }
+        .nav-item  img{
+            display: block;
+            height:24px;
+            
+        }
+
+        .nav-item {
+            padding: 12px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            display: flex;          
+            align-items: center;     
+            gap: 12px;
+        }
+
+        .nav-item:hover {
+            background-color: #272727;
+        }
+
+        .active {
+            background-color: #272727;
+            font-weight: bold;
+        }
+
+        
+        main {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+
+        .video-grid {
+            display: grid;
+            grid: 1;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .video-card {
+            cursor: pointer;
+           
+        }
+
+        .thumbnail {
+            width: 100%;
+            height: 140px;
+            background-color: #333;
+            border-radius: 12px;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        .video-info {
+            display: flex;
+            gap: 12px;
+        }
+
+        .pfp {
+            display: flex;
+            width: 120px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+        .pfs {
+            display: flex;
+            width: 70px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+        
+        
+
+        .video-details h3 {
+            font-size: 14px;
+            margin-bottom: 5px;
+            line-height: 20px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            
+        }
+
+        .video-details p {
+            font-size: 12px;
+            color: #aaa;
+        }
+        @media (min-width: 481px) {
+        body {
+        background-color: #1a1a1a;
+        }
+        .container {
+        gap: 15px;
+        }
+    }
+    @media (min-width: 1025px) {
+    body {
+        background-color: #2d2d2d;
+    }
+    .container {
+        grid-template-columns: repeat(3, 1fr); 
+        max-width: 1200px;
+        margin: 0 auto; 
+    }
+}
+    @media (min-width: 1441px) {
+    body {
+        background-color: #000000;
+    }
+    .container {
+        grid-template-columns: repeat(4, 1fr); /* Four items per row */
+        max-width: 1600px;
+    }
+}
+    @media (max-width: 480px) {
+    /* 1. Hide the side nav and change container flow */
+    .page-container {
+        flex-direction: column;
+    }
+
+    nav {
+        width: 100%;
+        height: auto;
+        display: flex;
+        overflow-x: auto; /* Allows horizontal swiping of menu items */
+        overflow-y: hidden;
+        white-space: nowrap;
+        padding: 5px 10px;
+        border-bottom: 1px solid #333;
+        background-color: #0f0f0f;
+    }
+
+    
+    .nav-item {
+        display: inline-flex;
+        padding: 8px 15px;
+        margin-right: 5px;
+        font-size: 13px;
+        flex-shrink: 0; 
+        background-color: #272727;
+        border-radius: 8px;
+    }
+
+    nav h3, nav hr, .nav-item img, 
+    nav .nav-item:nth-child(n+6) { 
+        display: none; 
+    }
+
+    
+    main {
+        padding: 10px;
+    }
+
+    .video-grid {
+        grid-template-columns: 1fr; 
+        gap: 15px;
+        
+    }
+
+    /* 5. Adjust Header for mobile */
+    header {
+        padding: 10px;
+    }
+
+    .search-box {
+        display: none; /* Usually hidden on mobile until search icon is clicked */
+    }
+
+    .youtube h1 {
+        font-size: 18px;
+    }
+}
+    .pfp, .pfs {
+    width: 36px;        
+    height: 36px;
+    min-width: 36px;    
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: #333; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.pfp img, .pfs img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    display: block;
+}
+
+
+@media (max-width: 480px) {
+    .video-info {
+        gap: 10px;
+        padding: 0 5px;
+    }
+    .search-box img {
+        height: 12px;
+        display: flex; 
+    }
+    
+    .pfp, .pfs {
+        width: 40px; 
+        height: 40px;
+        min-width: 40px;
+    }
+    
+    .video-details h3 {
+        font-size: 15px; 
+    }
+}
+    </style>
+</head>
+<body>
+
+    <header>
+        <div style="font-weight: bold; font-size: 20px;">
+            <div class="youtube">
+            <img src="https://static.vecteezy.com/system/resources/thumbnails/018/930/572/small/youtube-logo-youtube-icon-transparent-free-png.png"><h1>Youtube</h1>
+        </div>
+        </div>
+        
+        <div class="search-box">
+            <input type="text" placeholder="Search">
+            <button><img src="https://static.vecteezy.com/system/resources/thumbnails/068/224/549/small/magnifying-glass-icon-search-exploration-free-png.png" alt="Search" style="width: 20px; height: 20px; "></button>
+        </div>
+        <div style="display: flex; gap: 15px;">
+            <span>🔔</span>
+            <div style="width: 32px; height: 32px; background: #d2691e; border-radius: 50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:bold;">R</div>
+        </div>
+    </header>
+
+    <div class="page-container">
+        <nav>
+            <div class="nav-item active">🏠︎ Home</div>
+            <div class="nav-item">🎞️ Shorts</div>
+            <div class="nav-item">📺 Subscriptions</div>
+            <div class="nav-item">👤 You</div>
+            <div class="nav-item">🕒 History</div>
+             <hr style="border: 0.5px solid #333; margin: 10px 0;">
+             <h3>Explore</h3>
+             <div class="nav-item">🛍️ Shopping</div>
+             <div class="nav-item">🎵  Music </div>
+             <div class="nav-item">🎬 Movies</div>
+             <div class="nav-item">📺 Live</div>
+             <div class="nav-item">🎮 Gaming</div>
+             <div class="nav-item">📰 News</div>
+             <div class="nav-item">🏆 Sports</div>
+             <div class="nav-item">🎓 courses</div>
+             <div class="nav-item">👘 Fashion & beauty</div>
+             <div class="nav-item">🎙️ Podcasts</div>
+             <div class="nav-item"> ▶︎  playables</div>
+             <hr style="border: 0.5px solid #333; margin: 10px 0;">
+             <h3>More from YouTube</h3>
+             <div style="font-weight: bold; font-size: 20px; color: white;">
+             <div class="nav-item">
+             <img src="https://static.vecteezy.com/system/resources/thumbnails/018/930/572/small/youtube-logo-youtube-icon-transparent-free-png.png" alt="Youtube Logo">
+             Youtube Premium
+        </div>
+    </div>
+            <div style="font-weight: bold; font-size: 20px; color: white;">
+             <div class="nav-item">
+             <img src="https://static.vecteezy.com/system/resources/thumbnails/017/395/384/small/youtube-music-icon-free-png.png" alt="Youtube music Logo">
+             Youtube Music
+        </div>
+    </div>
+                <div style="font-weight: bold; font-size: 20px; color: white;">
+                <div class="nav-item">
+                <img src="https://images.seeklogo.com/logo-png/64/3/youtube-kids-icon-logo-png_seeklogo-642233.png" alt="Youtube music Logo">
+                Youtube Kids
+                </div>
+                </div>
+                <hr style="border: 0.5px solid #333; margin: 10px 0;">
+                <div class="nav-item">🏳️ Report history</div>
+
+        </nav>
+
+        <main>
+            <div class="video-grid">
+                <div class="video-card">
+                    <img src="https://img.youtube.com/vi/fJaAYcERf3Y/0.jpg" class="thumbnail">
+                    <div class="video-info">
+                        <div class="pfp"><img src="https://content.jdmagicbox.com/v2/comp/bangalore/h6/080pxx80.xx80.250304191358.x6h6/catalogue/kvn-productions-bangalore-film-production-houses-tu217j43hw-250.jpg" ></div>
+                        <div class="video-details">
+                            <h3>Jana Nayagan - Official Trailer | Thalapathy Vijay | Pooja Hegde | H Vinoth | Anirudh | KVN</h3>
+                            <p>KVN  55M views  3 months ago</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="video-card">
+                    <a href="https://www.youtube.com/watch?v=k9Ek9oDhmnA&list=RDk9Ek9oDhmnA&start_radio=1"><img src="https://feeds.abplive.com/onecms/images/uploaded-images/2025/12/18/50fc2ba4becc1fad0146003c42b72ea517660636674171270_original.jpg?impolicy=abp_cdn&imwidth=1200&height=675" class="thumbnail"></a>
+                    <div class="video-info">
+                        <div class="pfp"><img src="https://i.pinimg.com/originals/67/17/e3/6717e3aee41d7e9bebbd80289cc27652.jpg"></div>
+                        <div class="video-details">
+                            <h3>Jana Nayagan – Oru Pere Varalaaru Lyrical | Thalapathy Vijay | H Vinoth |Anirudh |KVN |Vishal Mishra</h3>
+                            <p>T-Series Tamil  53M views  2 weeks ago</p>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div class="video-card">
+                    <img src="https://static.qobuz.com/images/covers/kb/74/qpnfqsm5e74kb_600.jpg" class="thumbnail">
+                    <div class="video-info">
+                        <div class="pfs"><img src="https://media.cinemaexpress.com/cinemaexpress/2026-04-01/ypyulky3/TVK-campaign-song.jpg?w=480&auto=format,compress&fit=max" ></div>
+                        <div class="video-details">
+                            <h3>Unga Vijay, Na Varen - Tamilaga Vettri Kazhagam</h3>
+                            <p>Thalapathi Vijay-Trends 4.3M views  8 months ago</p>
+                        
+                    </div>
+                </div>
+                </div>
+            <div class="video-card">
+                <a href=""><img src="https://koshalworld.com/siteuploads/thumb/sft87/43177_4.jpg" class="thumbnail"></a>
+                <div class="video-info">
+                    <div class="pfp"><img src="https://i.pinimg.com/originals/67/17/e3/6717e3aee41d7e9bebbd80289cc27652.jpg" ></div>
+                    <div class="video-details">
+                        <h3>Full Video: MATTA | The Greatest Of All Time | Thalapathy Vijay | Venkat Prabhu |Yuvan Shankar Raja</h3>
+                        <p>T-Series Tamil  143M views  1 year ago</p>
+                    </div>
+                </div>
+            </div>
+            <div class="video-card">
+                <img src="https://i.ytimg.com/vi/K1KdMictk3s/0.jpg" class="thumbnail">
+                <div class="video-info">
+                    <div class="pfp"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b9/Sony_Music_Entertainment_Logo_2023.svg" ></div>
+                    <div class="video-details">
+                        <h3>Thalaivaa - Title Track Video | Vijay, Santhanam</h3>
+                        <p>SonyMusicSouthVevo 21M views  11 years ago</p>
+                    </div>
+                </div>
+                </div>
+                <div class="video-card">
+                <img src="https://i3.ytimg.com/vi/JHJmFbLeK-Y/0.jpg" class="thumbnail">
+                <div class="video-info">
+                    <div class="pfp"><img src="https://thecommunemag.com/wp-content/uploads/2024/08/tvk-vijay-tamizhaga-vettri-kazhagam-vetri-kazhagam-flag-logo-launch-elephant-vaagai-flower-anthem.jpg" ></div>
+                    <div class="video-details">
+                        <h3>TVK ELECTION CAMPAIGN SONG - உங்க விஜய் நா வரேன்! Whistle அடிக்க ரெடியா?</h3>
+                        <p>Tamilaga Vettri Kazhagam 7M views  3 weeks ago</p>
+                    </div>
+                </div>
+                </div>
+                <div class="video-card">
+                <img src="https://tamilimages.timesnownews.com/thumb/msid-152783583,thumbsize-33062,width-1280,height-720,resizemode-75/152783583.jpg" class="thumbnail">
+                <div class="video-info">
+                    <div class="pfp"><img src="https://thecommunemag.com/wp-content/uploads/2024/08/tvk-vijay-tamizhaga-vettri-kazhagam-vetri-kazhagam-flag-logo-launch-elephant-vaagai-flower-anthem.jpg" ></div>
+                    <div class="video-details">
+                        <h3>Tamilaga Vettri Kazhagam: Flag Anthem | தமிழக வெற்றிக் கழகம்: கொடிப் பாடல்</h3>
+                        <p>Tamilaga Vettri Kazhagam 10M views  1 year ago </p>
+                    </div>
+                </div>
+                </div>
+                <div class="video-card">
+                <img src="https://filmfare.wwmindia.com/content/2026/apr/vijaylendsvoicetotvkcampaignsongaspartyshiftsintoelectionmodethuuu1775127434.jpg" class="thumbnail">
+                <div class="video-info">
+                    <div class="pfp"><img src="https://i.pinimg.com/originals/b4/20/7e/b4207e426c9592a369f7b95c444a07ef.jpg" ></div>
+                    <div class="video-details">
+                        <h3>THALAPATHY VIJAY - THE RISE OF A LEADER | TVK ELECTION CAMPAIGN SONG | DANCE COVER |</h3>
+                        <p>Sasi vijay 99K views  3 days ago  </p>
+                    </div>
+                </div>
+                </div>
+                <div class="video-card">
+                <img src="https://akm-img-a-in.tosshub.com/indiatoday/images/story/202604/vijay-mgr-254021614-16x9_0.jpg?VersionId=u7HrhNm_PeaWJJLrLuoU0L1bjGpSR_24&size=690:388" class="thumbnail">
+                <div class="video-info">
+                    <div class="pfp"><img src="https://thecommunemag.com/wp-content/uploads/2024/08/tvk-vijay-tamizhaga-vettri-kazhagam-vetri-kazhagam-flag-logo-launch-elephant-vaagai-flower-anthem.jpg" ></div>
+                    <div class="video-details">
+                        <h3>Tamilaga Vettri Kazhagam: Ideology Song | தமிழக வெற்றிக் கழகம்: கொள்கைப் பாடல்</h3>
+                        <p>Tamilaga vetri Kazhagam 5.6M views  1 year ago</p>
+                    </div>
+                </div>
+                </div>
+                <div class="video-card">
+                <img src="https://media.cinemaexpress.com/cinemaexpress/2026-04-01/ypyulky3/TVK-campaign-song.jpg?w=480&auto=format,compress&fit=max" class="thumbnail">
+                <div class="video-info">
+                    <div class="pfp"><img src="https://i.pinimg.com/originals/b4/20/7e/b4207e426c9592a369f7b95c444a07ef.jpg" ></div>
+                    <div class="video-details">
+                        <h3>Tvk Vijay Election Song | Jananayagan Jananayagan | Puratchi Thalapathy Vijay | Mano | R M Rajesh</h3>
+                        <p>Ungal mano 353K views  6 days ago </p>
+                    </div>
+                </div>
+                </div>
+                <div class="video-card">
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEihqpeV-xDim0sdVhVhmEX1HhBezrHlBytMqEspi2KRhSMSLDHwissUw_HvaemUn5rHf82ZqijIzqRwvnlOPGkJIDi0MBjhwQxVxqet7uJAvzWJkeHN_rviw3M_qVERqCrTD_xYVEIejEaOmV1UgUXcdnUzLKKym53g3EyvhAdf6-OH0oXPxv7iQn_JWVgt/s480/1000205141.webp" class="thumbnail">
+                <div class="video-info">
+                    <div class="pfp"><img src="https://i.pinimg.com/originals/67/17/e3/6717e3aee41d7e9bebbd80289cc27652.jpg" ></div>
+                    <div class="video-details">
+                        <h3>Jana Nayagan – Thalapathy Kacheri Lyric Video| Thalapathy Vijay| H Vinoth| Anirudh| Pooja Hegde| KVN</h3>
+                        <p>T-series 149,705,411 views  5 months ago </p>
+                    </div>
+                </div>
+                </div>
+                <div class="video-card">
+                <img src="https://i.ytimg.com/vi/xsbLtHql4g8/hqdefault.jpg" class="thumbnail">
+                <div class="video-info">
+                    <div class="pfp"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b9/Sony_Music_Entertainment_Logo_2023.svg" ></div>
+                    <div class="video-details">
+                        <h3>Mersal - Aalaporan Thamizhan Tamil Video | Vijay | A.R. Rahman</h3>
+                        <p>SonyMusicSouthVevo 204M views  8 years ago </p>
+                    </div>
+                </div>
+                </div>
+                <div class="video-card">
+                <img src="https://pagallworlds.com/wp-content/uploads/2024/02/Oru-Viral-Puratchi.jpg" class="thumbnail">
+                <div class="video-info">
+                    <div class="pfs"><img src="https://cdn.brandfetch.io/id2ql28GPH/w/1539/h/1539/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1768986821305" ></div>
+                    <div class="video-details">
+                        <h3>Sarkar - Oru Viral Puratchi Tamil Video | Thalapathy Vijay | A .R. Rahman | A.R Murugadoss</h3>
+                        <p>Sony Music India 5.2M views  7 years ago </p>
+                    </div>
+                </div>
+                </div>
+                <div class="video-card">
+                <img src="https://www.hindustantimes.com/ht-img/img/2025/09/27/original/PTI09-27-2025-000273B-0_1758987754612_1758987771937.jpg" class="thumbnail">
+                <div class="video-info">
+                    <div class="pfs"><img src="https://static.vecteezy.com/system/resources/thumbnails/010/760/639/small/tb-logo-t-b-design-white-tb-letter-tb-letter-logo-design-initial-letter-tb-linked-circle-uppercase-monogram-logo-vector.jpg" ></div>
+                    <div class="video-details">
+                        <h3>SEYYONE 🔥 | Thalapathy Vijay Political MASS Anthem (3D)</h3>
+                        <p>TB Entertainments 354K views  2 months ago  </p>
+                    </div>
+                </div>
+                </div>
+
+            
+
+            
+         
+                
+        </main>
+    </div>
+
+</body>
+</html>
